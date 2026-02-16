@@ -1,0 +1,28 @@
+{
+  "name": "swingerman-atdd",
+  "owner": {
+    "name": "Miklos",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Acceptance Test Driven Development methodology plugin for Claude Code, inspired by Uncle Bob's approach",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "atdd",
+      "source": ".",
+      "description": "Acceptance Test Driven Development for Claude Code. Enforces the ATDD methodology: write Given/When/Then specs first, generate a project-specific test pipeline, maintain two test streams (acceptance + unit). Inspired by Robert C. Martin's acceptance test approach from empire-2025.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Miklos"
+      },
+      "homepage": "https://github.com/swingerman/atdd",
+      "repository": "https://github.com/swingerman/atdd",
+      "license": "MIT",
+      "keywords": ["atdd", "acceptance-testing", "tdd", "given-when-then", "spec-driven-design", "uncle-bob", "bdd"],
+      "category": "development-workflows",
+      "tags": ["testing", "methodology", "acceptance-tests", "spec-driven-design", "ai-development"]
+    }
+  ]
+}
