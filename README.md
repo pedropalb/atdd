@@ -25,7 +25,7 @@ When you start building a feature, this plugin ensures you follow the ATDD disci
 ## Installation
 
 ```bash
-claude plugin add miklos/atdd
+claude plugin add swingerman/atdd
 ```
 
 ## Usage
