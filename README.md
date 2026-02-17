@@ -101,7 +101,17 @@ The spec-guardian agent reviews your specs for implementation details that shoul
 
 For larger features, you can orchestrate an agent team that follows the ATDD workflow. The team lead coordinates specialist agents — each with a clear role and strict instructions.
 
-> **Tip:** The plugin includes an `atdd-team` skill that automates team setup and orchestration. Just say "build [feature] with a team" and the skill handles role creation, phase sequencing, and prompt generation. If you already have an active team, the skill will offer to extend it with ATDD roles rather than replacing it.
+> **Tip:** The plugin includes an `atdd-team` skill that automates team setup and orchestration. Just say "build [feature] with a team" and the skill handles role creation, phase sequencing, and prompt generation.
+
+### Works With Existing Teams
+
+Already running an agent team? The `atdd-team` skill detects active teams and gives you three options:
+
+- **Extend** — Add ATDD roles (spec-writer, implementer, reviewer) to your existing team. Roles that already exist by name are skipped.
+- **Replace** — Shut down the current team and create a fresh ATDD team.
+- **New team** — Create a separate ATDD team alongside your existing one.
+
+This means you can spin up a team for any purpose, then later say "add ATDD to my team" or "extend my team with ATDD" and the spec-writer, implementer, and reviewer roles join your existing teammates without disrupting ongoing work.
 
 ### Team Roles
 
