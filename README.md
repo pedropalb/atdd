@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://github.com/swingerman/atdd)
-[![Version](https://img.shields.io/badge/version-0.1.0-green)](https://github.com/swingerman/atdd)
+[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://github.com/swingerman/atdd)
 
 A [Claude Code](https://code.claude.com) plugin that enforces the **Acceptance Test Driven Development** (ATDD) methodology when building software with AI. Write human-readable Given/When/Then specs before code, generate project-specific test pipelines, and maintain the discipline of two-stream testing.
 
@@ -97,6 +97,181 @@ Run the acceptance tests (they should fail), then implement with TDD until both 
 
 The spec-guardian agent reviews your specs for implementation details that shouldn't be there.
 
+## Team-Based ATDD Workflow
+
+For larger features, you can orchestrate an agent team that follows the ATDD workflow. The team lead coordinates specialist agents — each with a clear role and strict instructions.
+
+### Team Roles
+
+| Role | Agent Type | Responsibility |
+|------|-----------|----------------|
+| **Team Lead** | You (or a `general-purpose` agent) | Orchestrates workflow, reviews specs, approves all work, enforces discipline |
+| **Spec Writer** | `general-purpose` | Writes Given/When/Then specs from feature requirements using domain language only |
+| **Implementer** | `general-purpose` | Builds code using TDD — unit tests first, then implementation — until both test streams pass |
+| **Spec Guardian** | `general-purpose` (read-heavy) | Reviews specs for implementation leakage before and after implementation |
+
+### Setting Up the Team
+
+**Prompt to create the team:**
+
+```
+Create a team called "atdd-feature" with the following teammates:
+
+1. "spec-writer" (general-purpose) — Writes Given/When/Then acceptance
+   test specs. Has the atdd plugin installed. Must follow the /atdd:atdd
+   skill strictly.
+
+2. "implementer" (general-purpose) — Implements features using TDD.
+   Writes unit tests first, then code, until both acceptance tests and
+   unit tests pass.
+
+3. "reviewer" (general-purpose) — Reviews specs for implementation
+   leakage and reviews code for quality. Uses /atdd:spec-check.
+```
+
+### Step-by-Step: Team Lead Instructions
+
+#### Phase 1 — Spec Writing
+
+Send to **spec-writer**:
+
+```
+We're implementing [feature description].
+
+Follow the ATDD workflow from the atdd plugin. Your job:
+
+1. Read the existing codebase to understand the domain language
+   (how does the app refer to users, orders, sessions, etc.?)
+2. Write Given/When/Then specs in specs/[feature-name].txt
+3. Use ONLY external observables — no class names, no API endpoints,
+   no database tables, no framework terms
+4. Each spec file starts with a semicolon comment block describing
+   the behavior
+5. Use periods at the end of each statement
+6. Send me the specs for review before proceeding
+
+CRITICAL: If you're unsure whether a term is domain language or
+implementation language, ask me. Do NOT guess.
+
+Example of what I expect:
+
+;===============================================================
+; User can register with email and password.
+;===============================================================
+GIVEN no registered users.
+
+WHEN a user registers with email "bob@example.com" and password "secret123".
+
+THEN there is 1 registered user.
+THEN the user "bob@example.com" can log in.
+```
+
+#### Phase 2 — Spec Review
+
+Send to **reviewer**:
+
+```
+Review the specs in specs/[feature-name].txt for implementation leakage.
+
+Flag ANY of these:
+- Class names, function names, method names
+- Database tables, columns, queries
+- API endpoints, HTTP methods, status codes
+- Framework terms (controller, service, repository, middleware)
+- Internal state or data structures
+- File paths or module names
+
+For each violation, show the bad line and propose a rewrite using
+domain language only.
+
+Also check:
+- Is each spec testing ONE behavior?
+- Are the GIVEN/WHEN/THEN statements clear to a non-developer?
+- Could these specs work for a different implementation language?
+
+Send me your review.
+```
+
+#### Phase 3 — Pipeline Generation
+
+As team lead, do this yourself or instruct:
+
+```
+Generate the test pipeline for this project. Analyze:
+- Language and test framework in use
+- Project structure and existing test patterns
+- The specs in specs/[feature-name].txt
+
+Create the 3-stage pipeline:
+1. Parser — reads specs/*.txt, outputs IR to acceptance-pipeline/ir/
+2. Generator — reads IR, produces runnable tests in generated-acceptance-tests/
+3. Runner script — run-acceptance-tests.sh
+
+The generator must have DEEP knowledge of the codebase internals.
+This is NOT Cucumber. Generated tests should call directly into the
+system — no manual fixture glue.
+
+Run the acceptance tests after generation. They MUST fail (red).
+If they pass, either the behavior already exists or the generator
+isn't testing the right thing.
+```
+
+#### Phase 4 — Implementation
+
+Send to **implementer**:
+
+```
+The acceptance specs are in specs/[feature-name].txt.
+The test pipeline is set up — run ./run-acceptance-tests.sh to execute.
+
+Implement the feature using TDD:
+
+1. Run acceptance tests first — confirm they FAIL
+2. Pick the simplest failing acceptance test
+3. Write a unit test for the smallest piece needed
+4. Write minimal code to make the unit test pass
+5. Refactor
+6. Repeat 3-5 until that acceptance test passes
+7. Move to the next failing acceptance test
+8. Continue until ALL acceptance tests AND unit tests pass
+
+RULES:
+- Never modify spec files (specs/*.txt) — they are the contract
+- Never modify generated test files — only regenerate via the pipeline
+- If a spec seems wrong or ambiguous, STOP and ask me
+- Run both test streams before reporting done:
+  ./run-acceptance-tests.sh  (acceptance tests)
+  [project test command]      (unit tests)
+- Send me the results when both streams are green
+```
+
+#### Phase 5 — Post-Implementation Review
+
+Send to **reviewer**:
+
+```
+Implementation is complete. Do two reviews:
+
+1. SPEC REVIEW: Run /atdd:spec-check on specs/[feature-name].txt
+   Check if any implementation details leaked into specs during
+   development. Propose cleanups if found.
+
+2. CODE REVIEW: Review the implementation for:
+   - Test quality (are unit tests testing the right things?)
+   - Code structure (does it match what the specs describe?)
+   - Missing edge cases (any specs that should be added?)
+
+Send me both reviews.
+```
+
+### Tips for Team Leads
+
+- **Never let implementers modify specs.** Specs are YOUR contract. If an implementer says a spec is wrong, review it yourself before authorizing changes.
+- **Run spec-check twice** — once before implementation (catch leakage from spec writing) and once after (catch leakage from implementation pressure).
+- **Keep specs portable.** Ask yourself: "Could these specs generate the same feature in a different language?" If not, there's leakage.
+- **Scope tightly.** Each team cycle should cover one feature. Don't spec the whole system — spec what you're building now.
+- **Verify both streams.** Before accepting the implementer's work, run both the acceptance tests and unit tests yourself.
+
 ## GWT Spec Format
 
 Specs use an opinionated, human-readable Given/When/Then format:
@@ -173,3 +348,4 @@ Contributions are welcome! Please open an issue or PR on [GitHub](https://github
 ## License
 
 [MIT](LICENSE)
+
