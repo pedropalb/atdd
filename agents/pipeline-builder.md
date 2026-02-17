@@ -191,11 +191,53 @@ If a pipeline already exists:
 4. Ensure backward compatibility with existing specs
 5. Run the full pipeline to verify nothing breaks
 
-## Output
+## Post-Generation Setup
 
-After generating the pipeline, report:
+After generating the pipeline, perform these setup steps:
+
+### 1. Update .gitignore
+
+Add generated artifact directories to the project's `.gitignore`:
+
+```
+acceptance-pipeline/ir/
+generated-acceptance-tests/
+```
+
+### 2. Update CLAUDE.md
+
+Add (or update) an **Acceptance Tests** section in the project's
+`CLAUDE.md` so Claude Code understands the ATDD setup in every session.
+Include the actual pipeline commands, not placeholders:
+
+```markdown
+## Acceptance Tests
+
+Acceptance tests are `.txt` files in `specs/` in Given/When/Then format.
+
+### Pipeline
+
+1. **Parse:** [actual parse command]
+2. **Generate:** [actual generate command]
+3. **Run:** [actual test command]
+
+Full pipeline: `./run-acceptance-tests.sh`
+
+### Rules
+
+- Never modify a spec `.txt` file without explicit permission.
+- Never modify generated tests — only delete and regenerate via the pipeline.
+- Generated tests and IR files are gitignored — do not commit them.
+- Before a push, run the full acceptance test pipeline.
+- On failure, report the spec file name and line number.
+```
+
+### 3. Report
+
+After setup, report:
 
 - What files were created/modified
-- How to run the pipeline
+- How to run the pipeline (the exact commands)
+- The CLAUDE.md section that was added
 - Any specs that the pipeline cannot yet handle (and why)
 - Suggestions for improving spec coverage

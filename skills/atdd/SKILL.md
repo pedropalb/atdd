@@ -206,15 +206,69 @@ leave internal structure unchecked. Unit tests alone miss integration.
 
 ```
 project-root/
-├── specs/                    # Acceptance test specs (.txt files)
-│   ├── authentication.txt
-│   ├── shopping-cart.txt
+├── specs/                       # Acceptance test specs (.txt files)
+│   ├── authentication.txt       #   — committed to git
+│   ├── shopping-cart.txt        #   — committed to git
 │   └── ...
-├── acceptance-pipeline/      # Generated pipeline code
-│   ├── parser.*              # Spec parser
-│   ├── generator.*           # Test generator
-│   └── ir/                   # Intermediate representations
-├── generated-acceptance-tests/  # Generated executable tests
-│   └── ...
-└── run-acceptance-tests.sh   # Pipeline runner
+├── acceptance-pipeline/         # Pipeline code (parser + generator)
+│   ├── parser.*                 #   — committed to git
+│   ├── generator.*              #   — committed to git
+│   └── ir/                      #   — GITIGNORED (generated)
+├── generated-acceptance-tests/  # Executable test files
+│   └── ...                      #   — GITIGNORED (generated)
+└── run-acceptance-tests.sh      # Pipeline runner — committed to git
 ```
+
+### What to commit vs. gitignore
+
+**Commit these (source of truth):**
+- `specs/*.txt` — the acceptance test specs
+- `acceptance-pipeline/parser.*` — the parser code
+- `acceptance-pipeline/generator.*` — the generator code
+- `run-acceptance-tests.sh` — the pipeline runner script
+
+**Gitignore these (regenerated from source):**
+- `acceptance-pipeline/ir/` — intermediate representations
+- `generated-acceptance-tests/` — generated test files
+
+Add to the project's `.gitignore`:
+```
+acceptance-pipeline/ir/
+generated-acceptance-tests/
+```
+
+### Project CLAUDE.md integration
+
+After setting up the pipeline, add an **Acceptance Tests** section to
+the project's `CLAUDE.md` (or create one if it doesn't exist). This
+ensures Claude Code understands the ATDD setup in every session:
+
+```markdown
+## Acceptance Tests
+
+Acceptance tests are `.txt` files in `specs/` in Given/When/Then format.
+
+### Pipeline
+
+```
+.txt → Parser → IR → Generator → executable tests
+```
+
+1. **Parse:** [parse command] — reads `specs/*.txt`, produces IR in `acceptance-pipeline/ir/`
+2. **Generate:** [generate command] — reads IR, produces test files in `generated-acceptance-tests/`
+3. **Run:** [test command] — executes the generated tests
+
+Full pipeline: `./run-acceptance-tests.sh`
+
+### Rules
+
+- Never modify a spec `.txt` file without explicit permission.
+- Never modify generated tests — only delete and regenerate via the pipeline.
+- Generated tests and IR files are gitignored — do not commit them.
+- Before a push, run the full acceptance test pipeline.
+- On failure, report the spec file name and line number.
+```
+
+Adapt the commands and paths to match the project's language and
+test framework. The pipeline-builder agent generates this CLAUDE.md
+section automatically when creating the pipeline.
