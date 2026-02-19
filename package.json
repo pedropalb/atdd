@@ -1,0 +1,16 @@
+{
+  "name": "atdd",
+  "version": "0.2.0",
+  "description": "Enforce Acceptance Test Driven Development (ATDD) workflow with Gemini.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gemini",
+    "atdd",
+    "bdd",
+    "testing"
+  ],
+  "author": "swingerman",
+  "license": "MIT"
+}

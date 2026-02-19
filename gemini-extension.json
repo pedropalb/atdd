@@ -1,0 +1,6 @@
+{
+  "name": "atdd",
+  "version": "0.2.0",
+  "description": "Enforce Acceptance Test Driven Development (ATDD) workflow with Gemini.",
+  "settings": []
+}

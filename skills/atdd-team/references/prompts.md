@@ -13,17 +13,17 @@ Adapt placeholders (`[feature description]`, `[feature-name]`,
 ```
 Create a team called "atdd-[feature-name]" with the following teammates:
 
-1. "spec-writer" (general-purpose) — Writes Given/When/Then acceptance
-   test specs. Has the atdd plugin installed. Must follow the /atdd:atdd
+1. "spec-writer" (agent) — Writes Given/When/Then acceptance
+   test specs. Has the atdd extension installed. Must follow the atdd
    skill strictly. Never uses implementation language in specs.
 
-2. "implementer" (general-purpose) — Implements features using TDD.
+2. "implementer" (agent) — Implements features using TDD.
    Writes unit tests first, then code, until both acceptance tests and
    unit tests pass. Never modifies spec files.
 
-3. "reviewer" (general-purpose) — Reviews specs for implementation
-   leakage and reviews code for quality. Has the atdd plugin installed.
-   Uses /atdd:spec-check. Read-heavy role — primarily analyzes, does
+3. "reviewer" (agent) — Reviews specs for implementation
+   leakage and reviews code for quality. Has the atdd extension installed.
+   Uses spec-check. Read-heavy role — primarily analyzes, does
    not write production code.
 ```
 
@@ -34,14 +34,14 @@ Add the following ATDD roles to the existing team "[team-name]":
 
 [Include only roles that don't already exist by name]
 
-1. "spec-writer" (general-purpose) — Writes Given/When/Then acceptance
-   test specs following the atdd plugin's /atdd:atdd skill.
+1. "spec-writer" (agent) — Writes Given/When/Then acceptance
+   test specs following the atdd extension's atdd skill.
 
-2. "implementer" (general-purpose) — Implements features using TDD
+2. "implementer" (agent) — Implements features using TDD
    until both acceptance tests and unit tests pass.
 
-3. "reviewer" (general-purpose) — Reviews specs for implementation
-   leakage and reviews code for quality. Has the atdd plugin installed.
+3. "reviewer" (agent) — Reviews specs for implementation
+   leakage and reviews code for quality. Has the atdd extension installed.
 ```
 
 ---
@@ -53,7 +53,7 @@ Send to **spec-writer**:
 ```
 We're implementing [feature description].
 
-Follow the ATDD workflow from the atdd plugin. Your job:
+Follow the ATDD workflow from the atdd extension. Your job:
 
 1. Read the existing codebase to understand the domain language
    (how does the app refer to users, orders, sessions, etc.?)
@@ -230,7 +230,7 @@ Send to **reviewer**:
 ```
 Implementation is complete. Do two reviews:
 
-1. SPEC REVIEW: Run /atdd:spec-check on specs/[feature-name].txt
+1. SPEC REVIEW: Run spec-check on specs/[feature-name].txt
    Check if any implementation details leaked into specs during
    development. Propose cleanups if found.
 

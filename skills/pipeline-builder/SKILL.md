@@ -1,43 +1,14 @@
 ---
 name: pipeline-builder
 description: >-
-  Use this agent when generating or updating the acceptance test pipeline
+  Use this skill when generating or updating the acceptance test pipeline
   for a project, or when the user asks to "build the pipeline",
   "generate the parser", "generate the test generator", "update the
   pipeline", "create acceptance test infrastructure", or when the ATDD
-  skill reaches step 3 (pipeline generation). Examples:
-
-  <example>
-  Context: User has written GWT specs and needs the pipeline to run them
-  user: "I've written my acceptance test specs, now I need the pipeline to run them"
-  assistant: "I'll use the pipeline-builder agent to analyze your project and generate a parser, IR format, and test generator tailored to your codebase."
-  <commentary>
-  Specs exist but no pipeline yet — pipeline-builder generates the full 3-stage pipeline.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User added new GWT directives that the existing pipeline doesn't support
-  user: "I added new GIVEN directives for user roles but the parser doesn't understand them"
-  assistant: "I'll use the pipeline-builder agent to update the parser and generator to support the new directives."
-  <commentary>
-  Existing pipeline needs updating to support new spec vocabulary — pipeline-builder extends it.
-  </commentary>
-  </example>
-
-  <example>
-  Context: ATDD workflow step 3 — specs are written and approved
-  user: "Specs are approved, let's generate the pipeline"
-  assistant: "I'll invoke the pipeline-builder to create the test pipeline for your project."
-  <commentary>
-  Part of the ATDD workflow — automatically invoked after spec approval.
-  </commentary>
-  </example>
-
-model: inherit
-color: green
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
+  skill reaches step 3 (pipeline generation).
 ---
+
+# Pipeline Builder
 
 You are the Pipeline Builder — a specialist in generating project-specific
 acceptance test pipelines that transform Given/When/Then spec files into
@@ -204,10 +175,10 @@ acceptance-pipeline/ir/
 generated-acceptance-tests/
 ```
 
-### 2. Update CLAUDE.md
+### 2. Update GEMINI.md
 
 Add (or update) an **Acceptance Tests** section in the project's
-`CLAUDE.md` so Claude Code understands the ATDD setup in every session.
+`GEMINI.md` so Gemini understands the ATDD setup in every session.
 Include the actual pipeline commands, not placeholders:
 
 ```markdown
@@ -238,6 +209,6 @@ After setup, report:
 
 - What files were created/modified
 - How to run the pipeline (the exact commands)
-- The CLAUDE.md section that was added
+- The GEMINI.md section that was added
 - Any specs that the pipeline cannot yet handle (and why)
 - Suggestions for improving spec coverage

@@ -8,7 +8,6 @@ description: >-
   triggered by the /atdd command. Enforces the Acceptance Test Driven
   Development workflow: write Given/When/Then specs before code, generate
   a project-specific test pipeline, and maintain two test streams.
-version: 0.2.0
 ---
 
 # Acceptance Test Driven Development
@@ -18,7 +17,7 @@ adapted from Robert C. Martin's acceptance test approach.
 
 ## Core Principle
 
-> "The two different streams of tests cause Claude to think much more
+> "The two different streams of tests cause the AI to think much more
 > deeply about the structure of the code."
 > — Robert C. Martin
 
@@ -92,7 +91,7 @@ Specs are co-authored, but the human has final approval — ferociously defended
 
 ### Step 3: Generate the Test Pipeline
 
-Invoke the `pipeline-builder` agent to analyze the project and generate
+Activate the `pipeline-builder` skill to analyze the project and generate
 (or update) the three-stage pipeline:
 
 1. **Parser** — reads `.txt` spec files from `specs/`, produces structured IR
@@ -135,7 +134,7 @@ Now implement the feature using standard TDD:
 
 ### Step 6: Review Specs for Leakage
 
-After implementation, invoke the `spec-guardian` agent to review all
+After implementation, activate the `spec-guardian` skill to review all
 spec files for implementation details that may have crept in during
 development.
 
@@ -237,11 +236,11 @@ acceptance-pipeline/ir/
 generated-acceptance-tests/
 ```
 
-### Project CLAUDE.md integration
+### Project GEMINI.md integration
 
 After setting up the pipeline, add an **Acceptance Tests** section to
-the project's `CLAUDE.md` (or create one if it doesn't exist). This
-ensures Claude Code understands the ATDD setup in every session:
+the project's `GEMINI.md` (or create one if it doesn't exist). This
+ensures Gemini CLI understands the ATDD setup in every session:
 
 ```markdown
 ## Acceptance Tests
@@ -270,5 +269,5 @@ Full pipeline: `./run-acceptance-tests.sh`
 ```
 
 Adapt the commands and paths to match the project's language and
-test framework. The pipeline-builder agent generates this CLAUDE.md
+test framework. The pipeline-builder skill generates this GEMINI.md
 section automatically when creating the pipeline.
