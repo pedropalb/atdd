@@ -1,12 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-# PreToolUse hook: soft warning when writing code without specs
-# Fires on Write and Edit tool calls
+# BeforeTool hook: soft warning when writing code without specs
+# Fires on write_file and replace tools
 
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name // empty')
-file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
+file_path=$(echo "$input" | jq -r '.tool_input.filepath // empty')
 
 # Skip if no file path
 if [ -z "$file_path" ]; then
@@ -24,7 +24,7 @@ case "$file_path" in
 esac
 
 # Check if specs directory exists and has .txt files
-project_dir="${CLAUDE_PROJECT_DIR:-.}"
+project_dir="${GEMINI_PROJECT_DIR:-.}"
 specs_dir="$project_dir/specs"
 
 if [ ! -d "$specs_dir" ]; then

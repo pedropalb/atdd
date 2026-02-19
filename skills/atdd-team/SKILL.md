@@ -12,7 +12,6 @@ description: >-
   spec writing, spec review, pipeline generation, implementation, and
   post-implementation review. Supports extending an existing team with
   ATDD roles without replacing current teammates.
-version: 0.2.0
 ---
 
 # Team-Based ATDD Workflow
@@ -26,7 +25,7 @@ post-implementation review.
 
 Before creating a team, check for existing teams:
 
-1. Read `~/.claude/teams/` to list active teams
+1. Read `~/.gemini/teams/` (or equivalent team storage) to list active teams
 2. If a team exists, present the user with a choice:
    - **Extend** — Add ATDD roles (spec-writer, implementer, reviewer) to the
      existing team. Skip roles that already exist by name.
@@ -41,9 +40,9 @@ Create three teammates with these roles:
 
 | Name | Agent Type | Purpose |
 |------|-----------|---------|
-| `spec-writer` | `general-purpose` | Writes Given/When/Then acceptance specs in domain language. Follows the atdd skill strictly. |
-| `implementer` | `general-purpose` | Implements features using TDD. Unit tests first, then code, until both test streams pass. |
-| `reviewer` | `general-purpose` | Reviews specs for implementation leakage. Reviews code for quality. Has the atdd plugin installed. Runs /atdd:spec-check. |
+| `spec-writer` | `agent` | Writes Given/When/Then acceptance specs in domain language. Follows the atdd skill strictly. |
+| `implementer` | `agent` | Implements features using TDD. Unit tests first, then code, until both test streams pass. |
+| `reviewer` | `agent` | Reviews specs for implementation leakage. Reviews code for quality. Has the atdd extension installed. Runs `spec-check`. |
 
 The **team lead** (the orchestrating agent or user) owns the workflow, reviews
 specs, approves all work, and enforces discipline. The team lead never delegates
@@ -80,7 +79,7 @@ Instruct the reviewer to audit specs for implementation leakage:
 - Class names, function names, method names
 - Database tables, columns, queries
 - API endpoints, HTTP methods, status codes
-- Framework terms (controller, service, repository)
+- Framework terms (controller, service, repository, middleware)
 - Internal state or data structures
 
 Also verify: one behavior per spec, clarity for non-developers,
@@ -137,7 +136,7 @@ For the detailed prompt template, see `references/prompts.md` — Phase 4.
 
 Two reviews:
 
-1. **Spec review** — Run /atdd:spec-check. Check if implementation details
+1. **Spec review** — Run `spec-check`. Check if implementation details
    leaked into specs during development.
 2. **Code review** — Check test quality, code structure, missing edge cases.
 

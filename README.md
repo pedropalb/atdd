@@ -1,12 +1,15 @@
-# ATDD — Acceptance Test Driven Development for Claude Code
+# ATDD — Acceptance Test Driven Development for Gemini CLI
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://github.com/swingerman/atdd)
-[![Version](https://img.shields.io/badge/version-0.2.0-green)](https://github.com/swingerman/atdd)
+[![Gemini CLI Extension](https://img.shields.io/badge/Gemini%20CLI-Extension-blueviolet)](https://github.com/swingerman/atdd)
 
-A [Claude Code](https://code.claude.com) plugin that enforces the **Acceptance Test Driven Development** (ATDD) methodology when building software with AI. Write human-readable Given/When/Then specs before code, generate project-specific test pipelines, and maintain the discipline of two-stream testing.
+> **Note:** This is a fork of the [ATDD Claude Code Plugin](https://github.com/swingerman/atdd) converted to a Gemini CLI extension.
+>
+> **Warning:** This conversion was autonomously performed by the [Google Jules AI agent](https://cloud.google.com/jules) and has not been tested yet.
 
-**Inspired by [Robert C. Martin's](https://en.wikipedia.org/wiki/Robert_C._Martin) (Uncle Bob) acceptance test approach from [empire-2025](https://github.com/unclebob/empire-2025).** The ideas, methodology, and key insights in this plugin come directly from his work and public writings on Spec Driven Design (SDD) and ATDD.
+A [Gemini CLI](https://geminicli.com) extension that enforces the **Acceptance Test Driven Development** (ATDD) methodology when building software with AI. Write human-readable Given/When/Then specs before code, generate project-specific test pipelines, and maintain the discipline of two-stream testing.
+
+**Inspired by [Robert C. Martin's](https://en.wikipedia.org/wiki/Robert_C._Martin) (Uncle Bob) acceptance test approach from [empire-2025](https://github.com/unclebob/empire-2025).** The ideas, methodology, and key insights in this extension come directly from his work and public writings on Spec Driven Design (SDD) and ATDD.
 
 ## Why ATDD with AI?
 
@@ -15,9 +18,9 @@ When using AI to write code, two problems emerge:
 1. **AI writes code without constraints** — without acceptance tests anchoring behavior, AI can "willy-nilly plop code around" (Uncle Bob's words) and write unit tests that pass but don't verify the right behavior.
 2. **Implementation details leak into specs** — AI naturally tries to fill Given/When/Then statements with class names, API endpoints, and database tables instead of domain language.
 
-This plugin solves both problems by enforcing the ATDD workflow and guarding against implementation leakage. The result: **two test streams** (acceptance + unit) that constrain AI development, producing better-structured, more reliable code.
+This extension solves both problems by enforcing the ATDD workflow and guarding against implementation leakage. The result: **two test streams** (acceptance + unit) that constrain AI development, producing better-structured, more reliable code.
 
-> "The two different streams of tests cause Claude to think much more deeply about the structure of the code. It can't just willy-nilly plop code around and write a unit test for it. It is also constrained by the structure of the acceptance tests."
+> "The two different streams of tests cause the AI to think much more deeply about the structure of the code. It can't just willy-nilly plop code around and write a unit test for it. It is also constrained by the structure of the acceptance tests."
 > — Robert C. Martin
 
 ## How It Works
@@ -41,18 +44,16 @@ The generated pipeline is NOT like Cucumber. It's what Uncle Bob calls "a strang
 
 ## Installation
 
-Add the marketplace and install the plugin:
-
-```shell
-/plugin marketplace add swingerman/atdd
-/plugin install atdd@swingerman-atdd
-```
-
-Or test locally by cloning:
+Install the extension using the Gemini CLI:
 
 ```bash
-git clone https://github.com/swingerman/atdd.git
-claude --plugin-dir ./atdd
+gemini extensions install https://github.com/swingerman/atdd.git
+```
+
+Or install from a local directory:
+
+```bash
+gemini extensions link .
 ```
 
 ## Getting Started
@@ -60,10 +61,10 @@ claude --plugin-dir ./atdd
 ### 1. Start the ATDD workflow
 
 ```
-/atdd:atdd Add user authentication with email and password
+/atdd Add user authentication with email and password
 ```
 
-Claude will guide you through understanding the feature, then help you write acceptance specs.
+Gemini will guide you through understanding the feature, then help you write acceptance specs.
 
 ### 2. Write your first spec
 
@@ -83,7 +84,7 @@ THEN the user "bob@example.com" can log in.
 
 ### 3. Generate the test pipeline
 
-Claude analyzes your codebase and generates a project-specific parser, IR format, and test generator tailored to your language and test framework (pytest, Jest, JUnit, Go testing, RSpec, etc.).
+Gemini analyzes your codebase and generates a project-specific parser, IR format, and test generator tailored to your language and test framework (pytest, Jest, JUnit, Go testing, RSpec, etc.).
 
 ### 4. Red → Green → Refactor
 
@@ -92,16 +93,16 @@ Run the acceptance tests (they should fail), then implement with TDD until both 
 ### 5. Check for leakage
 
 ```
-/atdd:spec-check
+/spec-check
 ```
 
-The spec-guardian agent reviews your specs for implementation details that shouldn't be there.
+The `spec-guardian` skill reviews your specs for implementation details that shouldn't be there.
 
 ## Team-Based ATDD Workflow
 
 For larger features, you can orchestrate an agent team that follows the ATDD workflow. The team lead coordinates specialist agents — each with a clear role and strict instructions.
 
-> **Tip:** The plugin includes an `atdd-team` skill that automates team setup and orchestration. Just say "build [feature] with a team" and the skill handles role creation, phase sequencing, and prompt generation.
+> **Tip:** The extension includes an `atdd-team` skill that automates team setup and orchestration. Just say "build [feature] with a team" and the skill handles role creation, phase sequencing, and prompt generation.
 
 ### Works With Existing Teams
 
@@ -118,9 +119,9 @@ This means you can spin up a team for any purpose, then later say "add ATDD to m
 | Role | Agent Type | Responsibility |
 |------|-----------|----------------|
 | **Team Lead** | You (or a `general-purpose` agent) | Orchestrates workflow, reviews specs, approves all work, enforces discipline |
-| **Spec Writer** | `general-purpose` | Writes Given/When/Then specs from feature requirements using domain language only |
-| **Implementer** | `general-purpose` | Builds code using TDD — unit tests first, then implementation — until both test streams pass |
-| **Spec Guardian** | `general-purpose` (read-heavy) | Reviews specs for implementation leakage before and after implementation |
+| **Spec Writer** | `agent` | Writes Given/When/Then specs from feature requirements using domain language only |
+| **Implementer** | `agent` | Builds code using TDD — unit tests first, then implementation — until both test streams pass |
+| **Spec Guardian** | `agent` (read-heavy) | Reviews specs for implementation leakage before and after implementation |
 
 ### Setting Up the Team
 
@@ -129,16 +130,16 @@ This means you can spin up a team for any purpose, then later say "add ATDD to m
 ```
 Create a team called "atdd-feature" with the following teammates:
 
-1. "spec-writer" (general-purpose) — Writes Given/When/Then acceptance
-   test specs. Has the atdd plugin installed. Must follow the /atdd:atdd
+1. "spec-writer" (agent) — Writes Given/When/Then acceptance
+   test specs. Has the atdd extension installed. Must follow the atdd
    skill strictly.
 
-2. "implementer" (general-purpose) — Implements features using TDD.
+2. "implementer" (agent) — Implements features using TDD.
    Writes unit tests first, then code, until both acceptance tests and
    unit tests pass.
 
-3. "reviewer" (general-purpose) — Reviews specs for implementation
-   leakage and reviews code for quality. Uses /atdd:spec-check.
+3. "reviewer" (agent) — Reviews specs for implementation
+   leakage and reviews code for quality. Uses spec-check.
 ```
 
 ### Step-by-Step: Team Lead Instructions
@@ -150,7 +151,7 @@ Send to **spec-writer**:
 ```
 We're implementing [feature description].
 
-Follow the ATDD workflow from the atdd plugin. Your job:
+Follow the ATDD workflow from the atdd extension. Your job:
 
 1. Read the existing codebase to understand the domain language
    (how does the app refer to users, orders, sessions, etc.?)
@@ -264,7 +265,7 @@ Send to **reviewer**:
 ```
 Implementation is complete. Do two reviews:
 
-1. SPEC REVIEW: Run /atdd:spec-check on specs/[feature-name].txt
+1. SPEC REVIEW: Run spec-check on specs/[feature-name].txt
    Check if any implementation details leaked into specs during
    development. Propose cleanups if found.
 
@@ -312,47 +313,49 @@ Specs must describe what the system does, not how it does it:
 > "Specs will be co-authored by the humans and the AI, but with final approval, ferociously defended, by the humans."
 > — Robert C. Martin
 
-## Plugin Components
+## Extension Components
 
 | Component | Name | Purpose |
 |-----------|------|---------|
 | Skill | `atdd` | Core 7-step ATDD workflow: specs → pipeline → red/green → iterate |
 | Skill | `atdd-team` | Orchestrates an agent team for ATDD — handles team setup, role assignment, and phase sequencing |
-| Agent | `spec-guardian` | Catches implementation leakage in Given/When/Then statements |
-| Agent | `pipeline-builder` | Generates bespoke parser → IR → test generator for your project |
-| Command | `/atdd:atdd` | Start the ATDD workflow for a new feature |
-| Command | `/atdd:spec-check` | Audit specs for implementation leakage |
-| Hook | PreToolUse | Soft warning when writing code without acceptance specs |
-| Hook | Stop | Reminder to verify both test streams pass |
+| Skill | `spec-guardian` | Catches implementation leakage in Given/When/Then statements |
+| Skill | `pipeline-builder` | Generates bespoke parser → IR → test generator for your project |
+| Command | `/atdd` | Start the ATDD workflow for a new feature |
+| Command | `/spec-check` | Audit specs for implementation leakage |
+| Hook | BeforeTool | Soft warning when writing code without acceptance specs |
+| Hook | SessionEnd | Reminder to verify both test streams pass |
 
 ## Key Principles
 
-These principles from Uncle Bob's writings are encoded in the plugin:
+These principles from Uncle Bob's writings are encoded in the extension:
 
 - **"Just enough specs for this sprint"** — Don't write all specs upfront. Spec the current feature, implement it, iterate. Avoid Big Up-Front Design.
 - **"Two test streams constrain development"** — Acceptance tests define WHAT (external behavior), unit tests define HOW (internal structure). Both must pass.
 - **"Specs describe only external observables"** — No class names, API endpoints, database tables, or framework terms in specs. Domain language only.
-- **"Co-authored by humans and AI, ferociously defended by humans"** — Claude proposes specs, you approve them. Always.
+- **"Co-authored by humans and AI, ferociously defended by humans"** — Gemini proposes specs, you approve them. Always.
 - **"Small steps"** — Whether your sprint is a day, an hour, or a microsecond, the same rules apply.
 
 ## What This Is NOT
 
 - **Not Cucumber.** The generated pipeline has deep knowledge of your system's internals. No generic fixture layer that requires manual glue code.
-- **Not a template library.** Claude analyzes your project fresh every time and generates a bespoke pipeline for your language, framework, and codebase.
+- **Not a template library.** Gemini analyzes your project fresh every time and generates a bespoke pipeline for your language, framework, and codebase.
 - **Not Big Up-Front Design.** Write just enough specs for the current feature. Iterate.
 
 ## Works With Any Language
 
-The pipeline-builder agent analyzes your project and generates the parser/generator in your project's language and test framework. Tested approaches include Python/pytest, TypeScript/Jest, Java/JUnit, Go/testing, Ruby/RSpec, Clojure/Speclj, and more.
+The pipeline-builder skill analyzes your project and generates the parser/generator in your project's language and test framework. Tested approaches include Python/pytest, TypeScript/Jest, Java/JUnit, Go/testing, Ruby/RSpec, Clojure/Speclj, and more.
 
 ## Attribution
 
-This plugin is an implementation of Robert C. Martin's (Uncle Bob) Acceptance Test Driven Development and Spec Driven Design methodology for Claude Code. The approach, insights, and principles come from:
+This extension is an implementation of Robert C. Martin's (Uncle Bob) Acceptance Test Driven Development and Spec Driven Design methodology for Gemini CLI. The approach, insights, and principles come from:
 
 - [empire-2025](https://github.com/unclebob/empire-2025) — Uncle Bob's project where this approach was developed and refined
 - His public writings and tweets on ATDD, SDD, and AI-assisted development
 
-This plugin does not contain any code from empire-2025. It adapts the methodology for use as a Claude Code plugin.
+This extension does not contain any code from empire-2025. It adapts the methodology for use as a Gemini CLI extension.
+
+Grateful acknowledgment to [swingerman](https://github.com/swingerman/atdd), the original author of the Claude Code plugin this extension is based on.
 
 ## Contributing
 
@@ -361,4 +364,3 @@ Contributions are welcome! Please open an issue or PR on [GitHub](https://github
 ## License
 
 [MIT](LICENSE)
-

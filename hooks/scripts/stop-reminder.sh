@@ -2,9 +2,11 @@
 set -euo pipefail
 
 # Stop hook: remind to verify both test streams
-# Fires when Claude finishes a task
+# Fires when Gemini session ends (SessionEnd)
 
-project_dir="${CLAUDE_PROJECT_DIR:-.}"
+# Note: SessionEnd hooks are advisory and best-effort.
+
+project_dir="${GEMINI_PROJECT_DIR:-.}"
 specs_dir="$project_dir/specs"
 
 # Only remind if specs exist (project is using ATDD)
@@ -19,5 +21,5 @@ if [ "$txt_count" -eq 0 ]; then
 fi
 
 # Specs exist — remind about dual-stream verification
-echo '{"decision": "approve", "systemMessage": "ATDD reminder: Before considering this task complete, verify both test streams pass — acceptance tests (run-acceptance-tests.sh) and unit tests. Both streams must be green."}'
+echo '{"systemMessage": "ATDD reminder: Before considering this task complete, verify both test streams pass — acceptance tests (run-acceptance-tests.sh) and unit tests. Both streams must be green."}'
 exit 0

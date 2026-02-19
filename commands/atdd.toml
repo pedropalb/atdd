@@ -1,11 +1,8 @@
----
-name: atdd
-description: Start the ATDD workflow for a new feature. Optionally provide a feature description as an argument.
----
-
+description = "Start the ATDD workflow for a new feature. Optionally provide a feature description as an argument."
+prompt = """
 Start the Acceptance Test Driven Development workflow.
 
-Invoke the `atdd` skill to guide the full workflow:
+Activate the `atdd` skill to guide the full workflow:
 
 1. Understand the feature (use the argument as starting context if provided)
 2. Write Given/When/Then acceptance specs in `specs/`
@@ -17,4 +14,5 @@ Invoke the `atdd` skill to guide the full workflow:
 If no feature description was provided as an argument, ask the user
 what feature they want to build.
 
-**User's input:** $ARGUMENTS
+**User's input:** {{args}}
+"""
