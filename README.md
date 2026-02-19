@@ -3,6 +3,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Gemini CLI Extension](https://img.shields.io/badge/Gemini%20CLI-Extension-blueviolet)](https://github.com/swingerman/atdd)
 
+> **Note:** This is a fork of the [ATDD Claude Code Plugin](https://github.com/swingerman/atdd) converted to a Gemini CLI extension.
+>
+> **Warning:** This conversion was autonomously performed by the [Google Jules AI agent](https://cloud.google.com/jules) and has not been tested yet.
+
 A [Gemini CLI](https://geminicli.com) extension that enforces the **Acceptance Test Driven Development** (ATDD) methodology when building software with AI. Write human-readable Given/When/Then specs before code, generate project-specific test pipelines, and maintain the discipline of two-stream testing.
 
 **Inspired by [Robert C. Martin's](https://en.wikipedia.org/wiki/Robert_C._Martin) (Uncle Bob) acceptance test approach from [empire-2025](https://github.com/unclebob/empire-2025).** The ideas, methodology, and key insights in this extension come directly from his work and public writings on Spec Driven Design (SDD) and ATDD.
